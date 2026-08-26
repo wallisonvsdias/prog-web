@@ -2,10 +2,11 @@
     box-sizing: border-box;
 }
 
-
 table {
     font-family: Georgia, 'Times New Roman', Times, serif;
     border-collapse: collapse;
+    width: 100%;
+
 }
 
 th, td {
@@ -19,17 +20,8 @@ th {
     font-size: large;
 }
 
-.row {
+.tables-container {
   display: flex;
-}
-
-.column {
-  flex: 50%;
-  padding: 5px;
-}
-
-@media screen and (max-width: 600px) {
-  .column {
-    width: 100%;
-  }
+  gap: 24px;
+  flex-wrap: wrap;
 }
