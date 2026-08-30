@@ -1,0 +1,65 @@
+      body {
+         font-family: Arial, sans-serif;
+         padding: 20px;
+      }
+
+      .botoes-container {
+         margin-bottom: 20px;
+         display: flex;
+         gap: 10px;
+      }
+
+      button {
+         padding: 8px 16px;
+         cursor: pointer;
+         border-radius: 6px;
+         border: 1px solid #ccc;
+         background-color: #f0f0f0;
+         font-weight: bold;
+         transition: background-color 0.2s;
+      }
+
+      button:hover {
+         background-color: #e0e0e0;
+      }
+
+      .cerveja-card {
+         background-color: #f7f4ee;
+         border-left: 5px solid #827153;
+         padding: 10px 15px;
+         margin-bottom: 8px;
+         border-radius: 4px;
+         font-weight: 500;
+         color: #333;
+      }
+
+      .tabela-cervejas {
+         width: 100%;
+         max-width: 450px;
+         border-collapse: collapse;
+         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+         border-radius: 6px;
+         overflow: hidden;
+      }
+
+      .tabela-cervejas th {
+         background-color: #827153;
+         color: #ffffff;
+         text-align: left;
+         padding: 12px;
+         font-size: 15px;
+      }
+
+      .tabela-cervejas td {
+         padding: 10px 12px;
+         border-bottom: 1px solid #ddd;
+         color: #333;
+      }
+
+      .tabela-cervejas tr:nth-child(even) {
+         background-color: #f9f9f9;
+      }
+
+      .tabela-cervejas tr:hover {
+         background-color: #f1ebd9;
+      }
