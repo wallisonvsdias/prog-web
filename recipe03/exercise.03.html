@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Exercise 3</title>
+      <style>
+         #conteudoCerveja {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+         }
+
+         #conteudoCerveja.visivel {
+            opacity: 1;
+         }
+      </style>
+   </head>
+   <body>
+      <div>
+         <button id="botaoCarregar">Exibir com Efeito</button>
+      </div>
+      <div id="conteudoCerveja"></div>
+
+      <script>
+         function alternarComFade() {
+            let div = document.getElementById("conteudoCerveja")
+
+            if (div.classList.contains("visivel")) {
+               div.classList.remove("visivel")
+               setTimeout(() => {
+                  div.innerHTML = ""
+               }, 400)
+            } else {
+               div.innerHTML = `<h1>Guinness</h1>`
+               setTimeout(() => {
+                  div.classList.add("visivel")
+               }, 20)
+            }
+         }
+
+         let botao = document.getElementById("botaoCarregar")
+         botao.addEventListener("click", alternarComFade)
+      </script>
+   </body>
+</html>

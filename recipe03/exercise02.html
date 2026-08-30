@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Exercise 2</title>
+   </head>
+   <body>
+      <div>
+         <button id="botaoCarregar">Alternar Cerveja</button>
+      </div>
+      <div id="conteudoCerveja"></div>
+
+      <script>
+         function alternarDiv() {
+            let div = document.getElementById("conteudoCerveja")
+
+            if (div.innerHTML === "") {
+               div.innerHTML = `<h1>Guinness</h1>`
+            } else {
+               div.innerHTML = ""
+            }
+         }
+
+         let botao = document.getElementById("botaoCarregar")
+         botao.addEventListener("click", alternarDiv)
+      </script>
+   </body>
+</html>
