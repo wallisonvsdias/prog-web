@@ -1,0 +1,26 @@
+p.verso {
+    color: green;
+}
+
+p.mote {
+    color: red;
+}
+
+a:visited {
+    color: brown;
+}
+
+a:hover {
+   color: black; 
+}
+
+a:focus {
+    color: pink;
+}
+
+.image{
+    height: 200px;
+    width: 200px;
+    object-fit: contain; 
+    border-radius: 50%;
+}
