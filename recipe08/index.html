@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Receita - Promessas com then e catch</title>
+
+   <style>
+      * {
+         box-sizing: border-box;
+         margin: 0;
+         padding: 0;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      body {
+         background-color: #f1f5f9;
+         color: #1e293b;
+         padding: 40px 20px;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+      }
+
+      header {
+         text-align: center;
+         margin-bottom: 24px;
+      }
+
+      header h1 {
+         font-size: 26px;
+         color: #0f172a;
+         margin-bottom: 6px;
+      }
+
+      header p {
+         color: #64748b;
+         font-size: 14px;
+      }
+
+      .painel-acoes {
+         display: flex;
+         gap: 12px;
+         margin-bottom: 24px;
+         flex-wrap: wrap;
+         justify-content: center;
+      }
+
+      /* Links estilizados como botões de ação */
+      .btn {
+         display: inline-block;
+         text-decoration: none;
+         background-color: #2563eb;
+         color: #ffffff;
+         padding: 10px 20px;
+         border-radius: 8px;
+         font-size: 14px;
+         font-weight: 600;
+         cursor: pointer;
+         transition: background-color 0.2s ease, transform 0.1s ease;
+         border: none;
+      }
+
+      .btn:hover {
+         background-color: #1d4ed8;
+      }
+
+      .btn:active {
+         transform: scale(0.98);
+      }
+
+      .btn-verde {
+         background-color: #059669;
+      }
+
+      .btn-verde:hover {
+         background-color: #047857;
+      }
+
+      .btn-erro {
+         background-color: #dc2626;
+      }
+
+      .btn-erro:hover {
+         background-color: #b91c1c;
+      }
+
+      .tabela-container {
+         width: 100%;
+         max-width: 900px;
+         background-color: #ffffff;
+         border-radius: 12px;
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+         border: 1px solid #e2e8f0;
+         overflow-x: auto;
+      }
+
+      table {
+         width: 100%;
+         border-collapse: collapse;
+         text-align: left;
+      }
+
+      th {
+         background-color: #0f172a;
+         color: #f8fafc;
+         padding: 14px 18px;
+         font-size: 13px;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+      }
+
+      td {
+         padding: 12px 18px;
+         border-bottom: 1px solid #f1f5f9;
+         font-size: 14px;
+         color: #334155;
+      }
+
+      tr:last-child td {
+         border-bottom: none;
+      }
+
+      tr:nth-child(even) {
+         background-color: #f8fafc;
+      }
+
+      tr:hover {
+         background-color: #f1f5f9;
+      }
+
+      .status-box {
+         padding: 24px;
+         text-align: center;
+         font-size: 14px;
+         color: #64748b;
+      }
+
+      .status-box.carregando {
+         color: #2563eb;
+         font-weight: 500;
+      }
+
+      .status-box.erro {
+         color: #dc2626;
+         background-color: #fef2f2;
+         font-weight: 500;
+      }
+   </style>
+</head>
+
+<body>
+   <header>
+      <h1>Consulta Assíncrona com Promessas</h1>
+      <p>Exercício com fetch(), then(), catch() e Renderização Modular</p>
+   </header>
+
+   <div class="painel-acoes">
+      <a href="#" id="linkCervejas" class="btn">Carregar Cervejas</a>
+      <a href="#" id="linkUsuarios" class="btn btn-verde">Carregar Usuários</a>
+      <a href="#" id="linkErro" class="btn btn-erro">Testar Erro (catch)</a>
+   </div>
+
+   <!-- Div alvo onde o estado e a tabela serão inseridos -->
+   <div id="resultadoDiv" class="tabela-container">
+      <div class="status-box">Nenhuma requisição realizada. Clique em uma das opções acima.</div>
+   </div>
+
+   <!-- Módulo ES6 importando a função genérica da tabela -->
+   <script type="module">
+      import { carregarTabela } from "./tabela.js";
+
+      const resultadoDiv = document.getElementById("resultadoDiv");
+
+      /**
+       * 1. Consulta Cervejas usando a cadeia Promise/then/catch
+       */
+      const carregarCervejas = () => {
+         // Atualiza o estado da interface imediatamente antes da Promise resolver
+         resultadoDiv.innerHTML = "<div class='status-box carregando'>Fazendo requisição de cervejas...</div>";
+
+         fetch("https://api.sampleapis.com/beers/ale")
+            .then(res => {
+               if (!res.ok) throw new Error(`Falha de comunicação: status HTTP ${res.status}`);
+               return res.json(); // Retorna nova Promise contendo o array JSON
+            })
+            .then(cervejas => {
+               // Normaliza os dados para exibir propriedades de interesse
+               const cervejasTratadas = cervejas.slice(0, 6).map(c => ({
+                  nome: c.name,
+                  preco: c.price,
+                  avaliacao: c.rating?.average ? `${c.rating.average} ★ (${c.rating.reviews} avaliações)` : "N/D"
+               }));
+
+               // Renderiza via tabela genérica
+               carregarTabela(
+                  cervejasTratadas,
+                  "resultadoDiv",
+                  ["Nome da Cerveja", "Preço Estimado", "Avaliação dos Usuários"],
+                  ["nome", "preco", "avaliacao"]
+               );
+            })
+            .catch(err => {
+               resultadoDiv.innerHTML = `<div class='status-box erro'>Falha ao carregar cervejas: ${err.message}</div>`;
+            });
+      };
+
+      /**
+       * 2. Consulta outro domínio (Usuários da JSONPlaceholder) via Promise/then/catch
+       */
+      const carregarUsuarios = () => {
+         resultadoDiv.innerHTML = "<div class='status-box carregando'>Buscando usuários da API...</div>";
+
+         fetch("https://jsonplaceholder.typicode.com/users")
+            .then(res => {
+               if (!res.ok) throw new Error(`Erro na API de usuários: status HTTP ${res.status}`);
+               return res.json();
+            })
+            .then(usuarios => {
+               const usuariosFormatados = usuarios.slice(0, 7).map(u => ({
+                  nome: u.name,
+                  email: u.email,
+                  cidade: u.address?.city,
+                  empresa: u.company?.name
+               }));
+
+               carregarTabela(
+                  usuariosFormatados,
+                  "resultadoDiv",
+                  ["Nome", "E-mail", "Cidade", "Empresa"],
+                  ["nome", "email", "cidade", "empresa"]
+               );
+            })
+            .catch(err => {
+               resultadoDiv.innerHTML = `<div class='status-box erro'>Falha ao carregar usuários: ${err.message}</div>`;
+            });
+      };
+
+      /**
+       * 3. Simulação de falha de conexão proposital para testar a captura no catch()
+       */
+      const dispararErroProposital = () => {
+         resultadoDiv.innerHTML = "<div class='status-box carregando'>Consultando endereço incorreto...</div>";
+
+         fetch("https://dominio-inexistente-para-testar-catch.xyz/api")
+            .then(res => res.json())
+            .then(dados => carregarTabela(dados, "resultadoDiv"))
+            .catch(err => {
+               resultadoDiv.innerHTML = `<div class='status-box erro'>Erro capturado pelo catch(): ${err.message}</div>`;
+            });
+      };
+
+      // Registro dos eventos de clique com preventDefault()
+      document.getElementById("linkCervejas").addEventListener("click", e => {
+         e.preventDefault();
+         carregarCervejas();
+      });
+
+      document.getElementById("linkUsuarios").addEventListener("click", e => {
+         e.preventDefault();
+         carregarUsuarios();
+      });
+
+      document.getElementById("linkErro").addEventListener("click", e => {
+         e.preventDefault();
+         dispararErroProposital();
+      });
+   </script>
+</body>
+</html>
