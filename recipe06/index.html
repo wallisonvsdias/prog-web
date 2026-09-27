@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+   <meta charset="UTF-8">
+   <title>Receita - Objetos JSON e Tabela Genérica</title>
+   
+   <!-- Exercício 2: Estilos CSS para bonitificar a tabela -->
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+         margin: 30px;
+         background-color: #f7f9fa;
+         color: #333;
+      }
+
+      .botoes-container {
+         display: flex;
+         gap: 12px;
+         margin-bottom: 24px;
+      }
+
+      button {
+         background-color: #0066cc;
+         color: #fff;
+         border: none;
+         padding: 10px 18px;
+         border-radius: 6px;
+         font-size: 14px;
+         font-weight: bold;
+         cursor: pointer;
+         transition: background-color 0.2s ease;
+      }
+
+      button:hover {
+         background-color: #004999;
+      }
+
+      table {
+         width: 100%;
+         max-width: 720px;
+         border-collapse: collapse;
+         background-color: #ffffff;
+         border-radius: 8px;
+         overflow: hidden;
+         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+         margin-bottom: 30px;
+      }
+
+      th, td {
+         padding: 12px 16px;
+         text-align: left;
+         border-bottom: 1px solid #e1e4e8;
+      }
+
+      th {
+         background-color: #1f2937;
+         color: #ffffff;
+         font-size: 14px;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+      }
+
+      tr:nth-child(even) {
+         background-color: #f9fafb;
+      }
+
+      tr:hover {
+         background-color: #f1f5f9;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="botoes-container">
+      <button id="botaoCarregar">Carregar Cervejas (Padrão)</button>
+      <button id="botaoCarregarOutros">Carregar Cafés (Genérico)</button>
+   </div>
+
+   <!-- Div alvo padrão (Exercício 4) -->
+   <div id="cervejasDiv"></div>
+
+   <!-- Div alvo secundário para testar a genericidade -->
+   <div id="outraDiv"></div>
+
+   <script>
+      // Exercício 3: Objetos com name, alcohol, style e ibu
+      const cervejas = [
+         {
+            name: "Guiness",
+            alcohol: "10%",
+            style: "Imperial Stout",
+            ibu: "45"
+         },
+         {
+            name: "Desperados",
+            alcohol: "6%",
+            style: "Lager",
+            ibu: "22"
+         },
+         {
+            name: "Becks",
+            alcohol: "5%",
+            style: "Pilsen",
+            ibu: "28"
+         }
+      ];
+
+      // Array alternativo para demonstrar que a função atende qualquer domínio
+      const cafes = [
+         { titulo: "Bourbon Amarelo", torra: "Média", regiao: "Sul de Minas" },
+         { titulo: "Catuaí Vermelho", torra: "Clara", regiao: "Cerrado Mineiro" },
+         { titulo: "Geisha Especial", torra: "Média Clara", regiao: "Alto Mogiana" }
+      ];
+
+      /**
+       * Função genérica para montagem e exibição de tabelas
+       * - cs: array de dados a ser percorrido
+       * - elementId: ID do container HTML (default: "cervejasDiv")
+       * - headers: rótulos das colunas do <thead> (default: ["Nome", "Álcool", "Estilo", "Amargor"])
+       * - props: chaves dos objetos para montar as células <td> (default: ["name", "alcohol", "style", "ibu"])
+       */
+      const carregarDiv = (
+         cs,
+         elementId = "cervejasDiv",
+         headers = ["Nome", "Álcool", "Estilo", "Amargor"],
+         props = ["name", "alcohol", "style", "ibu"]
+      ) => {
+         const div = document.getElementById(elementId);
+         if (!div) return;
+
+         // Monta o <thead> dinamicamente baseado no array de cabeçalhos
+         const theadHtml = `
+            <thead>
+               <tr>
+                  ${headers.map(h => `<th>${h}</th>`).join("")}
+               </tr>
+            </thead>
+         `;
+
+         // Monta as linhas do <tbody> acessando cada propriedade via indexação de objeto (item[p])
+         const linhasHtml = cs.map(item => `
+            <tr>
+               ${props.map(p => `<td>${item[p] ?? ""}</td>`).join("")}
+            </tr>
+         `).join("\n");
+
+         const tbodyHtml = `<tbody>${linhasHtml}</tbody>`;
+
+         // Injeta a tabela completa
+         div.innerHTML = `<table>${theadHtml}${tbodyHtml}</table>`;
+      };
+
+      // 1. Chamada utilizando TODOS os valores padrão
+      const botao = document.getElementById("botaoCarregar");
+      botao.addEventListener("click", () => carregarDiv(cervejas));
+
+      // 2. Chamada demonstrando a flexibilidade: outro ID, outros cabeçalhos e outras propriedades
+      const botaoOutros = document.getElementById("botaoCarregarOutros");
+      botaoOutros.addEventListener("click", () => carregarDiv(
+         cafes,
+         "outraDiv",
+         ["Grão", "Tipo de Torra", "Região Produtora"],
+         ["titulo", "torra", "regiao"]
+      ));
+   </script>
+</body>
+</html>
