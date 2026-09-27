@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercício 2 - Arrow Functions e Domínio Customizado</title>
+    <style>
+        table { border-collapse: collapse; margin-top: 16px; width: 60%; }
+        th, td { border: 1px solid #aaa; padding: 8px 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div>
+        <button id="btnCarregar">Carregar Cafés</button>
+        <button id="btnOrdenar">Ordenar por Nome</button>
+    </div>
+    
+    <div id="conteudo"></div>
+
+    <script>
+        const cafes = [
+            { nome: "Bourbon Amarelo", torra: "Média", origem: "Sul de Minas" },
+            { nome: "Catuaí Vermelho", torra: "Clara", origem: "Cerrado Mineiro" },
+            { nome: "Geisha", torra: "Clara", origem: "Mogiana" },
+            { nome: "Arábica Tradicional", torra: "Escura", origem: "Espírito Santo" }
+        ];
+
+        // Arrow function para formatar cada linha (tr) da tabela
+        const gerarLinha = cafe => `
+            <tr>
+                <td>${cafe.nome}</td>
+                <td>${cafe.torra}</td>
+                <td>${cafe.origem}</td>
+            </tr>
+        `;
+
+        // Arrow function para montar a tabela inteira
+        const montarTabela = lista => `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo de Torra</th>
+                        <th>Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${lista.map(gerarLinha).join("")}
+                </tbody>
+            </table>
+        `;
+
+        // Arrow function principal para renderizar na tela
+        const carregarTabela = (dados) => {
+            const div = document.getElementById("conteudo");
+            div.innerHTML = montarTabela(dados);
+        };
+
+        // Arrow function para ordenar a lista e renderizar
+        const ordenarERenderizar = (dados) => {
+            const dadosOrdenados = [...dados].sort((a, b) => a.nome.localeCompare(b.nome));
+            carregarTabela(dadosOrdenados);
+        };
+
+        // Arrow functions nos listeners
+        document.getElementById("btnCarregar").addEventListener("click", () => carregarTabela(cafes));
+        document.getElementById("btnOrdenar").addEventListener("click", () => ordenarERenderizar(cafes));
+    </script>
+</body>
+</html>

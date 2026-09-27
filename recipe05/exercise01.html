@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercício 1 - js-arrow</title>
+</head>
+<body>
+    <div><button id="botaoCarregar">Carregando cervejas...</button></div>
+    <div id="meu amor"></div>
+
+    <script>
+        const cervejas = ["Guiness", "Desperados", "Becks"];
+
+        // 1. carregarDiv agora recebe o parâmetro cervs
+        const carregarDiv = (cervs) => {
+            const div = document.getElementById("meu amor");
+            // 2. o .map() é aplicado sobre cervs
+            const cervejasHtml = cervs.map(item => `<h1>${item}</h1>`);
+            div.innerHTML = cervejasHtml.join("\n");
+        };
+
+        const botao = document.getElementById("botaoCarregar");
+        // 3. Passamos uma callback arrow function que chama carregarDiv passando 'cervejas'
+        botao.addEventListener("click", () => carregarDiv(cervejas));
+    </script>
+</body>
+</html>

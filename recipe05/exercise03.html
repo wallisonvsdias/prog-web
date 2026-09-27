@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercício 3 - Links acionando Arrow Functions</title>
+    <style>
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+        .nav-links a:hover {
+            color: #003366;
+        }
+        table { border-collapse: collapse; width: 60%; }
+        th, td { border: 1px solid #bbb; padding: 8px 12px; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <!-- Botões substituídos por tags <a> -->
+        <a id="linkCarregar" href="#">Carregar Cafés</a>
+        <a id="linkOrdenar" href="#">Ordenar Alfabeticamente</a>
+    </div>
+
+    <div id="conteudo"></div>
+
+    <script>
+        const cafes = [
+            { nome: "Bourbon Amarelo", torra: "Média", origem: "Sul de Minas" },
+            { nome: "Catuaí Vermelho", torra: "Clara", origem: "Cerrado Mineiro" },
+            { nome: "Geisha", torra: "Clara", origem: "Mogiana" },
+            { nome: "Arábica Tradicional", torra: "Escura", origem: "Espírito Santo" }
+        ];
+
+        const gerarLinha = cafe => `
+            <tr>
+                <td>${cafe.nome}</td>
+                <td>${cafe.torra}</td>
+                <td>${cafe.origem}</td>
+            </tr>
+        `;
+
+        const montarTabela = lista => `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Torra</th>
+                        <th>Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${lista.map(gerarLinha).join("")}
+                </tbody>
+            </table>
+        `;
+
+        const carregarTabela = (dados) => {
+            const div = document.getElementById("conteudo");
+            div.innerHTML = montarTabela(dados);
+        };
+
+        const ordenarERenderizar = (dados) => {
+            const dadosOrdenados = [...dados].sort((a, b) => a.nome.localeCompare(b.nome));
+            carregarTabela(dadosOrdenados);
+        };
+
+        // Captura referências dos links
+        const linkCarregar = document.getElementById("linkCarregar");
+        const linkOrdenar = document.getElementById("linkOrdenar");
+
+        // Listeners com preventDefault() para controlar o comportamento do link
+        linkCarregar.addEventListener("click", (e) => {
+            e.preventDefault();
+            carregarTabela(cafes);
+        });
+
+        linkOrdenar.addEventListener("click", (e) => {
+            e.preventDefault();
+            ordenarERenderizar(cafes);
+        });
+    </script>
+</body>
+</html>
